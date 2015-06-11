@@ -8,6 +8,8 @@
     UISlider *filterSettingsSlider;
     UIButton *photoCaptureButton;
     
+    GPUImagePicture *sourcePicture;
+    
     GPUImagePicture *memoryPressurePicture1, *memoryPressurePicture2;
 }
 

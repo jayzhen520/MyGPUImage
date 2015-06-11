@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5840732F1B2963C400C17D42 /* panda_4_3_king_hole.png in Resources */ = {isa = PBXBuildFile; fileRef = 5840732E1B2963C400C17D42 /* panda_4_3_king_hole.png */; };
 		BC6ED8E11545B9A900966798 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC6ED8E01545B9A900966798 /* AssetsLibrary.framework */; };
 		BCB3C42D16BCA81D003D26B0 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C42816BCA81D003D26B0 /* Icon-72.png */; };
 		BCB3C42E16BCA81D003D26B0 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C42916BCA81D003D26B0 /* Icon-72@2x.png */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5840732E1B2963C400C17D42 /* panda_4_3_king_hole.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = panda_4_3_king_hole.png; sourceTree = "<group>"; };
 		BC6ED8E01545B9A900966798 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		BCB3C42816BCA81D003D26B0 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../../SharedIcons/Icon-72.png"; sourceTree = "<group>"; };
 		BCB3C42916BCA81D003D26B0 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "../../SharedIcons/Icon-72@2x.png"; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 		BCC1E6A71523E3620006EFA5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5840732E1B2963C400C17D42 /* panda_4_3_king_hole.png */,
 				BCC9004A18D7D4F100A5A5C7 /* Lambeau.jpg */,
 				BCB3C42816BCA81D003D26B0 /* Icon-72.png */,
 				BCB3C42916BCA81D003D26B0 /* Icon-72@2x.png */,
@@ -260,6 +263,7 @@
 				BCB3C42F16BCA81D003D26B0 /* Icon.png in Resources */,
 				BCB3C43016BCA81D003D26B0 /* Icon@2x.png in Resources */,
 				E5066F561855AA1A008C7682 /* Default-568h@2x.png in Resources */,
+				5840732F1B2963C400C17D42 /* panda_4_3_king_hole.png in Resources */,
 				BCB3C43116BCA81D003D26B0 /* iTunesArtwork.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

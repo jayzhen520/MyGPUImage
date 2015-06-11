@@ -53,7 +53,7 @@
 //    stillCamera = [[GPUImageStillCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
     stillCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
 //    filter = [[GPUImageGammaFilter alloc] init];
-    filter = [[GPUImageSketchFilter alloc] init];
+    filter = [[GPUImageSaturationBlendFilter alloc] init];
 //    filter = [[GPUImageUnsharpMaskFilter alloc] init];
 //    [(GPUImageSketchFilter *)filter setTexelHeight:(1.0 / 1024.0)];
 //    [(GPUImageSketchFilter *)filter setTexelWidth:(1.0 / 768.0)];
@@ -68,6 +68,16 @@
 //	[filter prepareForImageCapture];
 //	[terminalFilter prepareForImageCapture];
     
+    
+    UIImage *inputImage;
+    inputImage = [UIImage imageNamed:@"panda_4_3_king_hole.png"];
+    
+    sourcePicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:YES];
+    [sourcePicture processImage];
+    [sourcePicture addTarget:filter];
+    
+    
+    
     [stillCamera addTarget:filter];
     
     GPUImageView *filterView = (GPUImageView *)self.view;
@@ -81,10 +91,10 @@
     
     [stillCamera startCameraCapture];
     
-//    UIImage *inputImage = [UIImage imageNamed:@"Lambeau.jpg"];
-//    memoryPressurePicture1 = [[GPUImagePicture alloc] initWithImage:inputImage];
+    //UIImage *inputImage = [UIImage imageNamed:@"panda_4_3_king_hole.png"];
+    //memoryPressurePicture1 = [[GPUImagePicture alloc] initWithImage:inputImage];
 //
-//    memoryPressurePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage];
+    //memoryPressurePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage];
 }
 
 - (void)viewDidUnload
@@ -102,13 +112,16 @@
 {
 //    [(GPUImagePixellateFilter *)filter setFractionalWidthOfAPixel:[(UISlider *)sender value]];
 //    [(GPUImageGammaFilter *)filter setGamma:[(UISlider *)sender value]];
+    
+    [(GPUImageSaturationBlendFilter *)filter setFactor:[(UISlider *)sender value]];
+    
 }
 
 - (IBAction)takePhoto:(id)sender;
 {
-    [photoCaptureButton setEnabled:NO];
+    //[photoCaptureButton setEnabled:NO];
     
-    [stillCamera capturePhotoAsJPEGProcessedUpToFilter:filter withCompletionHandler:^(NSData *processedJPEG, NSError *error){
+    /*[stillCamera capturePhotoAsJPEGProcessedUpToFilter:filter withCompletionHandler:^(NSData *processedJPEG, NSError *error){
 
         // Save to assets library
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
@@ -126,7 +139,58 @@
                  [photoCaptureButton setEnabled:YES];
              });
          }];
+    }];*/
+    
+    
+    [stillCamera capturePhotoAsImageProcessedUpToFilter:filter withCompletionHandler:^(UIImage *processedImage, NSError *error) {
+        
+        if (error) {
+            NSLog(@"ERROR: could not capture = %@", error);
+        } else {
+            NSLog(@"PHOTO SAVED - ??");
+            
+            // save photo to album
+            UIImageWriteToSavedPhotosAlbum(processedImage, nil, nil, nil);
+        }
+        
+        
     }];
+    
+    
+    
+    
+    
 }
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

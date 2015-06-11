@@ -12,6 +12,19 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
  uniform sampler2D inputImageTexture;
  uniform sampler2D inputImageTexture2;
  
+ uniform lowp float factor;
+ 
+ highp vec4 gray_filter(lowp vec4 inputColor){
+     highp float gray = 0.299 * inputColor.r + 0.587 * inputColor.g + 0.114 * inputColor.b;
+     return vec4(gray, gray, gray, inputColor.a);
+ }
+ 
+ lowp vec4 bright_contrast_filter(lowp vec4 inputColor, lowp float brightness, lowp float contrast){
+     lowp vec3 resultColor = (inputColor.rgb - 0.5) * contrast + brightness;
+     return vec4(resultColor.rgb, inputColor.a);
+ }
+ 
+ 
  highp float lum(lowp vec3 c) {
      return dot(c, vec3(0.3, 0.59, 0.11));
  }
@@ -93,10 +106,23 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
  
  void main()
  {
-	 highp vec4 baseColor = texture2D(inputImageTexture, textureCoordinate);
+	 /*highp vec4 baseColor = texture2D(inputImageTexture, textureCoordinate);
 	 highp vec4 overlayColor = texture2D(inputImageTexture2, textureCoordinate2);
      
-     gl_FragColor = vec4(baseColor.rgb * (1.0 - overlayColor.a) + setlum(setsat(baseColor.rgb, sat(overlayColor.rgb)), lum(baseColor.rgb)) * overlayColor.a, baseColor.a);
+     gl_FragColor = vec4(baseColor.rgb * (1.0 - overlayColor.a) + setlum(setsat(baseColor.rgb, sat(overlayColor.rgb)), lum(baseColor.rgb)) * overlayColor.a, baseColor.a);*/
+     
+     //gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+     highp vec4 stencilColor = texture2D(inputImageTexture, textureCoordinate);
+     highp vec4 cameraColor = texture2D(inputImageTexture2, textureCoordinate);
+     
+     if(stencilColor.a < 1.0 && stencilColor.a > 0.0){
+         stencilColor.rgb = vec3(1.0, 1.0, 1.0);
+     }
+     
+     cameraColor = gray_filter(cameraColor);
+     cameraColor = bright_contrast_filter(cameraColor, factor, 2.0);
+     
+     gl_FragColor = mix(cameraColor, stencilColor, stencilColor.a);
  }
 );
 #else
@@ -185,7 +211,7 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
          c = vec3(0.0);
      }
      return c;
- }
+ }z
  
  void main()
  {
@@ -207,7 +233,20 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 		return nil;
     }
     
+    factorUniform = [filterProgram uniformIndex:@"factor"];
+    self.factor = 0.5;
+    
     return self;
+}
+
+#pragma mark -
+#pragma mark Accessors
+
+- (void)setFactor:(CGFloat)newValue;
+{
+    _factor = newValue;
+    
+    [self setFloat:_factor forUniform:factorUniform program:filterProgram];
 }
 
 @end
