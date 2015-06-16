@@ -115,6 +115,8 @@
             /* Check that the bitmap pixel format is compatible with GL */
             CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(newImageSource);
             if ((bitmapInfo & kCGBitmapFloatComponents) != 0) {
+                
+                
                 /* We don't support float components for use directly in GL */
                 shouldRedrawUsingCoreGraphics = YES;
             } else {
@@ -184,8 +186,14 @@
         
         outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:pixelSizeToUseForTexture onlyTexture:YES];
         [outputFramebuffer disableReferenceCounting];
+        
+        
 
         glBindTexture(GL_TEXTURE_2D, [outputFramebuffer texture]);
+        
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        
         if (self.shouldSmoothlyScaleOutput)
         {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

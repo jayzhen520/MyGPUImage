@@ -1,6 +1,6 @@
-#import "GPUImageTwoInputFilter.h"
+#import "GPUImageThreeInputFilter.h"
 
-@interface GPUImageSaturationBlendFilter : GPUImageTwoInputFilter
+@interface GPUImageSaturationBlendFilter : GPUImageThreeInputFilter
 {
     GLint factorUniform;
 }

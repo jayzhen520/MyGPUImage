@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		583675BD1B2ADF1A0094BDEA /* justhole.png in Resources */ = {isa = PBXBuildFile; fileRef = 583675BC1B2ADF1A0094BDEA /* justhole.png */; };
+		583675C11B2AE11F0094BDEA /* squarewhite.png in Resources */ = {isa = PBXBuildFile; fileRef = 583675C01B2AE11F0094BDEA /* squarewhite.png */; };
 		5840732F1B2963C400C17D42 /* panda_4_3_king_hole.png in Resources */ = {isa = PBXBuildFile; fileRef = 5840732E1B2963C400C17D42 /* panda_4_3_king_hole.png */; };
+		58B7892E1B2EC20800ED5B89 /* myPanda.png in Resources */ = {isa = PBXBuildFile; fileRef = 58B7892D1B2EC20800ED5B89 /* myPanda.png */; };
+		58B7893B1B2FC88D00ED5B89 /* panda_4_3_king_hole_noalpha.png in Resources */ = {isa = PBXBuildFile; fileRef = 58B7893A1B2FC88D00ED5B89 /* panda_4_3_king_hole_noalpha.png */; };
 		BC6ED8E11545B9A900966798 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC6ED8E01545B9A900966798 /* AssetsLibrary.framework */; };
 		BCB3C42D16BCA81D003D26B0 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C42816BCA81D003D26B0 /* Icon-72.png */; };
 		BCB3C42E16BCA81D003D26B0 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C42916BCA81D003D26B0 /* Icon-72@2x.png */; };
@@ -56,7 +60,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		583675BC1B2ADF1A0094BDEA /* justhole.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = justhole.png; sourceTree = "<group>"; };
+		583675C01B2AE11F0094BDEA /* squarewhite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = squarewhite.png; sourceTree = "<group>"; };
 		5840732E1B2963C400C17D42 /* panda_4_3_king_hole.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = panda_4_3_king_hole.png; sourceTree = "<group>"; };
+		58B7892D1B2EC20800ED5B89 /* myPanda.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = myPanda.png; path = ../../../../../Downloads/myPanda.png; sourceTree = "<group>"; };
+		58B7893A1B2FC88D00ED5B89 /* panda_4_3_king_hole_noalpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = panda_4_3_king_hole_noalpha.png; path = ../../../../../Downloads/panda_4_3_king_hole_noalpha.png; sourceTree = "<group>"; };
 		BC6ED8E01545B9A900966798 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		BCB3C42816BCA81D003D26B0 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../../SharedIcons/Icon-72.png"; sourceTree = "<group>"; };
 		BCB3C42916BCA81D003D26B0 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "../../SharedIcons/Icon-72@2x.png"; sourceTree = "<group>"; };
@@ -156,6 +164,10 @@
 		BCC1E6A71523E3620006EFA5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				58B7893A1B2FC88D00ED5B89 /* panda_4_3_king_hole_noalpha.png */,
+				58B7892D1B2EC20800ED5B89 /* myPanda.png */,
+				583675C01B2AE11F0094BDEA /* squarewhite.png */,
+				583675BC1B2ADF1A0094BDEA /* justhole.png */,
 				5840732E1B2963C400C17D42 /* panda_4_3_king_hole.png */,
 				BCC9004A18D7D4F100A5A5C7 /* Lambeau.jpg */,
 				BCB3C42816BCA81D003D26B0 /* Icon-72.png */,
@@ -256,8 +268,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58B7893B1B2FC88D00ED5B89 /* panda_4_3_king_hole_noalpha.png in Resources */,
+				58B7892E1B2EC20800ED5B89 /* myPanda.png in Resources */,
 				BCC1E6AB1523E3620006EFA5 /* InfoPlist.strings in Resources */,
+				583675BD1B2ADF1A0094BDEA /* justhole.png in Resources */,
 				BCC9004B18D7D4F100A5A5C7 /* Lambeau.jpg in Resources */,
+				583675C11B2AE11F0094BDEA /* squarewhite.png in Resources */,
 				BCB3C42D16BCA81D003D26B0 /* Icon-72.png in Resources */,
 				BCB3C42E16BCA81D003D26B0 /* Icon-72@2x.png in Resources */,
 				BCB3C42F16BCA81D003D26B0 /* Icon.png in Resources */,

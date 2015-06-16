@@ -9,6 +9,7 @@
     UIButton *photoCaptureButton;
     
     GPUImagePicture *sourcePicture;
+    GPUImagePicture * sourcePicture2;
     
     GPUImagePicture *memoryPressurePicture1, *memoryPressurePicture2;
 }

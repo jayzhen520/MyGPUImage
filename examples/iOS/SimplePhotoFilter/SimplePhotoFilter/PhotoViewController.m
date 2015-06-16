@@ -68,6 +68,31 @@
 //	[filter prepareForImageCapture];
 //	[terminalFilter prepareForImageCapture];
     
+    [stillCamera addTarget:filter];
+    
+    GPUImageView *filterView = (GPUImageView *)self.view;
+    //    [filter addTarget:filterView];
+    [filter addTarget:filterView];
+    //    [terminalFilter addTarget:filterView];
+    
+    //    [stillCamera.inputCamera lockForConfiguration:nil];
+    //    [stillCamera.inputCamera setFlashMode:AVCaptureFlashModeOn];
+    //    [stillCamera.inputCamera unlockForConfiguration];
+    
+    [stillCamera startCameraCapture];
+    
+    //UIImage *inputImage = [UIImage imageNamed:@"panda_4_3_king_hole.png"];
+    //memoryPressurePicture1 = [[GPUImagePicture alloc] initWithImage:inputImage];
+    //
+    //memoryPressurePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage];
+    
+    UIImage * inputImage2;
+    inputImage2 = [UIImage imageNamed:@"panda_4_3_king_hole_noalpha.png"];
+    sourcePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage2 smoothlyScaleOutput:YES];
+    [sourcePicture2 processImage];
+    [sourcePicture2 addTarget:filter];
+    
+    
     
     UIImage *inputImage;
     inputImage = [UIImage imageNamed:@"panda_4_3_king_hole.png"];
@@ -78,23 +103,8 @@
     
     
     
-    [stillCamera addTarget:filter];
     
-    GPUImageView *filterView = (GPUImageView *)self.view;
-//    [filter addTarget:filterView];
-    [filter addTarget:filterView];
-//    [terminalFilter addTarget:filterView];
     
-//    [stillCamera.inputCamera lockForConfiguration:nil];
-//    [stillCamera.inputCamera setFlashMode:AVCaptureFlashModeOn];
-//    [stillCamera.inputCamera unlockForConfiguration];
-    
-    [stillCamera startCameraCapture];
-    
-    //UIImage *inputImage = [UIImage imageNamed:@"panda_4_3_king_hole.png"];
-    //memoryPressurePicture1 = [[GPUImagePicture alloc] initWithImage:inputImage];
-//
-    //memoryPressurePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage];
 }
 
 - (void)viewDidUnload
@@ -142,7 +152,26 @@
     }];*/
     
     
+//    NSString * pngPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Test2.png"];
+//    
+//    [UIImagePNGRepresentation(processedImage) writeToFile:pngPath atomically:YES];
+//    
+//    NSError * myError;
+//    NSFileManager * fileMgr = [NSFileManager defaultManager];
+//    NSString * documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+//    NSLog(@"Documents directory: %@", [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:&myError]);
+    
     [stillCamera capturePhotoAsImageProcessedUpToFilter:filter withCompletionHandler:^(UIImage *processedImage, NSError *error) {
+        
+         /*NSString * pngPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Test.png"];
+        
+        [UIImagePNGRepresentation(processedImage) writeToFile:pngPath atomically:YES];
+        
+        NSError * myError;
+        NSFileManager * fileMgr = [NSFileManager defaultManager];
+        NSString * documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+        NSLog(@"Documents directory: %@", [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:&myError]);*/
+        
         
         if (error) {
             NSLog(@"ERROR: could not capture = %@", error);
