@@ -29,7 +29,7 @@
 	filterSettingsSlider.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     filterSettingsSlider.minimumValue = 0.0;
     filterSettingsSlider.maximumValue = 3.0;
-    filterSettingsSlider.value = 1.0;
+    filterSettingsSlider.value = 0.5;
     
     [primaryView addSubview:filterSettingsSlider];
     
@@ -87,7 +87,7 @@
     //memoryPressurePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage];
     
     UIImage * inputImage2;
-    inputImage2 = [UIImage imageNamed:@"panda_4_3_king_hole_noalpha.png"];
+    inputImage2 = [UIImage imageNamed:@"pic/pandas2/表情600.jpg"];
     sourcePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage2 smoothlyScaleOutput:YES];
     [sourcePicture2 processImage];
     [sourcePicture2 addTarget:filter];
@@ -95,7 +95,7 @@
     
     
     UIImage *inputImage;
-    inputImage = [UIImage imageNamed:@"panda_4_3_king_hole.png"];
+    inputImage = [UIImage imageNamed:@"pic/pandas/表情600_hole.png"];
     
     sourcePicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:YES];
     [sourcePicture processImage];
