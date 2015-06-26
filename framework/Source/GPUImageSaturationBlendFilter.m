@@ -203,6 +203,7 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 - (void)rotateX:(float)rx Y:(float)ry Z:(float)rz radians:(float)ra
 {
     //GLKMatrix4Translate(mvp, rx, ry, rz);
+    //对rx,ry,rz进行判断，如果rx,ry,rz都为0，系统函数在进行Normalize时会出现错误。
     rotatexyz.x = rx;
     rotatexyz.y = ry;
     rotatexyz.z = rz;
