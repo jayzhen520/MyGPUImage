@@ -1,9 +1,25 @@
 #import "GPUImageSaturationBlendFilter.h"
+#import "GPUImageAddMiddleLayer.h"
 
 /**
  * Saturation blend mode based upon pseudo code from the PDF specification.
  */
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+
+NSString * const kGPUImageSaturationBlendVertexShaderString = SHADER_STRING
+(
+ attribute vec4 position;
+ attribute vec4 inputTextureCoordinate;
+ varying vec2 textureCoordinate;
+ 
+ uniform mat4 mvp;
+ 
+ void main() {
+     gl_Position = mvp * position;
+     textureCoordinate = inputTextureCoordinate.xy;
+ }
+);
+
 NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 (
  varying highp vec2 textureCoordinate;
@@ -145,7 +161,10 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 
 - (id)init;
 {
-    if (!(self = [super initWithFragmentShaderFromString:kGPUImageSaturationBlendFragmentShaderString]))
+    /*
+     initWithVertexShaderFromString:(NSString *)vertexShaderString fragmentShaderFromString:(NSString *)fragmentShaderString;
+     */
+    if (!(self = [super initWithVertexShaderFromString:kGPUImageSaturationBlendVertexShaderString fragmentShaderFromString:kGPUImageSaturationBlendFragmentShaderString]))
     {
 		return nil;
     }
@@ -153,17 +172,64 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
     factorUniform = [filterProgram uniformIndex:@"factor"];
     self.factor = 0.5;
     
+    /*
+     * OpenGL Matrix
+     */
+//    _mvp = GLKMatrix4Identity;
+    mvpUniform = [filterProgram uniformIndex:@"mvp"];
+    self.mvp = GLKMatrix4Identity;
+    
     return self;
 }
 
 #pragma mark -
 #pragma mark Accessors
 
-- (void)setFactor:(CGFloat)newValue;
+- (void)setFactor:(CGFloat)newValue
 {
     _factor = newValue;
     
     [self setFloat:_factor forUniform:factorUniform program:filterProgram];
+}
+
+- (void)translateX:(float) tx Y:(float) ty Z:(float) tz
+{
+    //GLKMatrix4Translate(mvp, tx, ty, tz);
+    movexyz.x = tx;
+    movexyz.y = ty;
+    movexyz.z = tz;
+}
+
+- (void)rotateX:(float)rx Y:(float)ry Z:(float)rz radians:(float)ra
+{
+    //GLKMatrix4Translate(mvp, rx, ry, rz);
+    rotatexyz.x = rx;
+    rotatexyz.y = ry;
+    rotatexyz.z = rz;
+    
+    radians = ra;
+}
+
+- (void)scaleX:(float)sx Y:(float)sy Z:(float)sz
+{
+    scalexyz.x = sx;
+    scalexyz.y = sy;
+    scalexyz.z = sz;
+}
+
+- (void)setMvp{
+    GLKMatrix4 temp1;
+    GLKMatrix4 temp2;
+    GLKMatrix4 temp3;
+    temp1 = GLKMatrix4ScaleWithVector3(_mvp, scalexyz);
+    temp2 = GLKMatrix4RotateWithVector3(temp1, radians, rotatexyz);
+    temp3 = GLKMatrix4TranslateWithVector3(temp2, movexyz);
+    
+    GPUMatrix4x4 mvp_trans;//GPUImage风格
+    //GPUMatrix4x4 * xx = malloc(sizeof(GPUMatrix4x4));
+    [GPUImageAddMiddleLayer MatrixTransFromGLKitMatrix4:temp3 ToGPUMatrix4x4:&mvp_trans];
+    
+    [self setMatrix4f:mvp_trans forUniform:mvpUniform program:filterProgram];
 }
 
 @end

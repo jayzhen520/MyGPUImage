@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		58CAF0E71B39409400A970AD /* pic in Resources */ = {isa = PBXBuildFile; fileRef = 58CAF0E61B39409400A970AD /* pic */; };
+		58CAF1781B3BDBA000A970AD /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58CAF1771B3BDBA000A970AD /* GLKit.framework */; };
 		BC6ED8E11545B9A900966798 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC6ED8E01545B9A900966798 /* AssetsLibrary.framework */; };
 		BCB3C42D16BCA81D003D26B0 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C42816BCA81D003D26B0 /* Icon-72.png */; };
 		BCB3C42E16BCA81D003D26B0 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C42916BCA81D003D26B0 /* Icon-72@2x.png */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		58CAF0E61B39409400A970AD /* pic */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pic; sourceTree = "<group>"; };
+		58CAF1771B3BDBA000A970AD /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		BC6ED8E01545B9A900966798 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		BCB3C42816BCA81D003D26B0 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../../SharedIcons/Icon-72.png"; sourceTree = "<group>"; };
 		BCB3C42916BCA81D003D26B0 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "../../SharedIcons/Icon-72@2x.png"; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58CAF1781B3BDBA000A970AD /* GLKit.framework in Frameworks */,
 				BCF867371725A72000912E34 /* libGPUImage.a in Frameworks */,
 				BC6ED8E11545B9A900966798 /* AssetsLibrary.framework in Frameworks */,
 				BCC1E6DA1523E9DC0006EFA5 /* AVFoundation.framework in Frameworks */,
@@ -127,6 +130,7 @@
 		BCC1E69F1523E3620006EFA5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				58CAF1771B3BDBA000A970AD /* GLKit.framework */,
 				BCC1E6B71523E3880006EFA5 /* GPUImage.xcodeproj */,
 				BCC1E6C61523E3C50006EFA5 /* CoreMedia.framework */,
 				BCC1E6C71523E3C50006EFA5 /* CoreVideo.framework */,

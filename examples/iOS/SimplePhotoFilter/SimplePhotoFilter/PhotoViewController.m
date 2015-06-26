@@ -123,9 +123,23 @@
 //    [(GPUImagePixellateFilter *)filter setFractionalWidthOfAPixel:[(UISlider *)sender value]];
 //    [(GPUImageGammaFilter *)filter setGamma:[(UISlider *)sender value]];
     
-    [(GPUImageSaturationBlendFilter *)filter setFactor:[(UISlider *)sender value]];
+    GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
+    [baozoubiaoqingfilter setFactor:[(UISlider *)sender value]];
+    
+    /*
+     *下面的函数调用应当是通过两指触控调用的函数，暂且添加在此处。
+     */
+    //做平移变换，值为0.0时为平移0。
+    [baozoubiaoqingfilter translateX: 0.0 Y:0.0 Z:0.0];
+    //做缩放变换，值为1.0时，放大为原来的1.0倍。
+    [baozoubiaoqingfilter scaleX:1.0 Y:1.0 Z:1.0];
+    //
+    [baozoubiaoqingfilter rotateX:0.0 Y:0.0 Z:1.0 radians:3.14159/2.0];
+    
+    [baozoubiaoqingfilter setMvp];
     
 }
+
 
 - (IBAction)takePhoto:(id)sender;
 {
