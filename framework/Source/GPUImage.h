@@ -156,3 +156,7 @@
 #import "GPUImageLaplacianFilter.h"
 #import "GPUImageiOSBlurFilter.h"
 #import "GPUImageLuminanceRangeFilter.h"
+#import "GPUImageAddPictureMoreDetail.h"
+#import "GPUImageAddPicture2Texture.h"
+#import "GPUImageAddPictureTextureArray.h"
+#import "GPUImageAddStencilChanger.h"

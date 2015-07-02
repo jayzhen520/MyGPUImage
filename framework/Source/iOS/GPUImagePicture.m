@@ -153,8 +153,20 @@
         CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
         
         CGContextRef imageContext = CGBitmapContextCreate(imageData, (size_t)pixelSizeToUseForTexture.width, (size_t)pixelSizeToUseForTexture.height, 8, (size_t)pixelSizeToUseForTexture.width * 4, genericRGBColorspace,  kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+//        imageContext->CGContextSetShouldAntialias:false;
+        
+//        CGContextSetShouldAntialias(imageContext, NO);
+//        CGContextSetAllowsAntialiasing(imageContext, false);
+        
+//        [[NSGraphicsContext currentContext]]
+        
         //        CGContextSetBlendMode(imageContext, kCGBlendModeCopy); // From Technical Q&A QA1708: http://developer.apple.com/library/ios/#qa/qa1708/_index.html
         CGContextDrawImage(imageContext, CGRectMake(0.0, 0.0, pixelSizeToUseForTexture.width, pixelSizeToUseForTexture.height), newImageSource);
+        
+//        for(int i = 0; i < 40; i++){
+//            NSLog(@"%x", *((int *)imageContext + i));
+//        }
+        
         CGContextRelease(imageContext);
         CGColorSpaceRelease(genericRGBColorspace);
     }

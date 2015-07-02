@@ -9,5 +9,10 @@
 #import <GPUImage/GPUImage.h>
 
 @interface GPUImageAddOutputFuncAdd : GPUImageOutput
+{
+    GPUImageAddPictureTextureArray * openglImageArray;
+}
+
+- (void)delTarget:(id<GPUImageInput>)newTarget atTextureLocation:(NSInteger)textureLocation;
 
 @end

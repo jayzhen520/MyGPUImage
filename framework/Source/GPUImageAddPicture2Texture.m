@@ -10,4 +10,13 @@
 
 @implementation GPUImageAddPicture2Texture
 
++ (GPUImageAddPictureMoreDetail * )getOpenGLImage:(NSString *) picturePath{
+    UIImage *inputImage;
+    inputImage = [UIImage imageNamed:picturePath];
+    
+    GPUImageAddPictureMoreDetail * sourcePicture = [[GPUImageAddPictureMoreDetail alloc] initWithImage:inputImage smoothlyScaleOutput:YES withPath:picturePath];
+    
+    return sourcePicture;
+}
+
 @end

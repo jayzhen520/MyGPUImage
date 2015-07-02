@@ -9,6 +9,10 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
+    //openglImageArray = [[GPUImageAddPictureTextureArray alloc] init];
+    stencilChanger = [[GPUImageAddStencilChanger alloc] init];
+    
+    loopTest = 0;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -41,6 +45,15 @@
     [photoCaptureButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     
     [primaryView addSubview:photoCaptureButton];
+    
+    stencilChangeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    stencilChangeButton.frame = CGRectMake(round(mainScreenFrame.size.width / 2.0 - 150.0 / 2.0), mainScreenFrame.size.height - 190.0, 150.0, 40.0);
+    [stencilChangeButton setTitle:@"StencilChange" forState:UIControlStateNormal];
+    stencilChangeButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    [stencilChangeButton addTarget:self action:@selector(changeStencil:) forControlEvents:UIControlEventTouchUpInside];
+    [stencilChangeButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
+    [primaryView addSubview:stencilChangeButton];
+
     
 	self.view = primaryView;	
 }
@@ -86,23 +99,27 @@
     //
     //memoryPressurePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage];
     
-    UIImage * inputImage2;
-    inputImage2 = [UIImage imageNamed:@"pic/pandas2/表情600.jpg"];
-    sourcePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage2 smoothlyScaleOutput:YES];
-    [sourcePicture2 processImage];
-    [sourcePicture2 addTarget:filter];
+//    UIImage * inputImage2;
+//    inputImage2 = [UIImage imageNamed:@"pic/pandas2/表情600.jpg"];
+//    sourcePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage2 smoothlyScaleOutput:YES];
+//    [sourcePicture2 processImage];
+//    [sourcePicture2 addTarget:filter];
+//    
+//    
+//    
+//    UIImage *inputImage;
+//    inputImage = [UIImage imageNamed:@"pic/pandas/表情600_hole.png"];
+//    
+//    sourcePicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:YES];
+//    [sourcePicture processImage];
+//    [sourcePicture addTarget:filter];
     
     
-    
-    UIImage *inputImage;
-    inputImage = [UIImage imageNamed:@"pic/pandas/表情600_hole.png"];
-    
-    sourcePicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:YES];
-    [sourcePicture processImage];
-    [sourcePicture addTarget:filter];
-    
-    
-    
+//    [openglImageArray addImage:@"pic/pandas2/表情600.jpg"];
+//    GPUImageAddPictureMoreDetail * pic;
+//    pic = [self->openglImageArray getOpenGLImage:@"pic/pandas2/表情600.jpg"];
+//    [pic processImage];
+//    [pic addTarget:filter];
     
     
 }
@@ -138,8 +155,84 @@
     
     [baozoubiaoqingfilter setMvp];
     
+//    GPUImageAddPictureMoreDetail * pic;
+//    
+//    if(!(loopTest % 2)){
+//    //if(loopTest % 2){
+//        /*不存在此图：加载此图，设定使用此图为渲染图*/
+//        if([openglImageArray findOpenGLImage:@"pic/pandas2/表情600.jpg"] == -1){
+//            [openglImageArray addImage:@"pic/pandas2/表情600.jpg"];
+//            pic = [self->openglImageArray getOpenGLImage:@"pic/pandas2/表情600.jpg"];
+//            
+//            //删除当前的渲染图片
+//            GPUImageAddPictureMoreDetail * oldPic = openglImageArray.currentPic;
+//            if(oldPic != nil){
+//                [oldPic removeTarget:filter];
+//            }
+//            
+//            [pic processImage];
+//            [openglImageArray setCurrentPic:pic];
+//            [pic addTarget:filter];
+//        }else{
+//            pic = [self->openglImageArray getOpenGLImage:@"pic/pandas2/表情600.jpg"];
+//            GPUImageAddPictureMoreDetail * oldPic = openglImageArray.currentPic;
+//            if(oldPic != nil){
+//                [oldPic removeTarget:filter];
+//            }
+//            [openglImageArray setCurrentPic:pic];
+//            [pic addTarget:filter];
+//        }
+//        
+//        
+//        
+//    }else{
+//        /*不存在此图：加载此图，设定使用此图为渲染图*/
+//        if([openglImageArray findOpenGLImage:@"pic/qdmd.png"] == -1){
+//            [openglImageArray addImage:@"pic/qdmd.png"];
+//            pic = [self->openglImageArray getOpenGLImage:@"pic/qdmd.png"];
+//            
+//            //删除当前的渲染图片
+//            GPUImageAddPictureMoreDetail * oldPic = openglImageArray.currentPic;
+//            if(oldPic != nil){
+//                [oldPic removeTarget:filter];
+//            }
+//            
+//            [pic processImage];
+//            [openglImageArray setCurrentPic:pic];
+//            [pic addTarget:filter];
+//        }else{
+//            pic = [self->openglImageArray getOpenGLImage:@"pic/qdmd.png"];
+//            GPUImageAddPictureMoreDetail * oldPic = openglImageArray.currentPic;
+//            if(oldPic != nil){
+//                [oldPic removeTarget:filter];
+//            }
+//            [openglImageArray setCurrentPic:pic];
+//            [pic addTarget:filter];
+//        }
+//
+//        
+//    }
+    
+//    else if(loopTest % 2 == 0){
+//        [openglImageArray addImage:@"pic/pandas2/表情600_hole.jpg"];
+//        pic = [self->openglImageArray getOpenGLImage:@"pic/pandas2/表情600_hole.jpg"];
+//        [pic processImage];
+//        [pic addTarget:filter];
+//    }
+    loopTest++;
+    
 }
 
+- (IBAction)changeStencil:(id)sender
+{
+    if(loopTest % 2 == 0){
+//        [self templatePictureLoad:@"pic/pandas/表情600_hole.png"];
+        [stencilChanger templatePictureLoad:@"pic/pandas/表情400" with:filter];
+    }else{
+        [stencilChanger templatePictureLoad:@"pic/qdmd.png" with:filter];
+    }
+    loopTest++;
+}
 
 - (IBAction)takePhoto:(id)sender;
 {
@@ -204,6 +297,7 @@
     
     
 }
+
 
 @end
 

@@ -168,6 +168,28 @@ NSString *const kGPUImageThreeInputTextureVertexShaderString = SHADER_STRING
     }
 }
 
+- (void)delInputFramebuffer:(GPUImageFramebuffer *)oldInputFramebuffer atIndex:
+(NSInteger)textureIndex;
+{
+    if (textureIndex == 0)
+    {
+        firstInputFramebuffer = nil;
+        hasSetFirstTexture = NO;
+        [firstInputFramebuffer unlock];
+    }
+    else if (textureIndex == 1)
+    {
+        secondInputFramebuffer = nil;
+        hasSetSecondTexture = NO;
+        [secondInputFramebuffer unlock];
+    }
+    else
+    {
+        thirdInputFramebuffer = nil;
+        [thirdInputFramebuffer unlock];
+    }
+}
+
 - (void)setInputSize:(CGSize)newSize atIndex:(NSInteger)textureIndex;
 {
     if (textureIndex == 0)

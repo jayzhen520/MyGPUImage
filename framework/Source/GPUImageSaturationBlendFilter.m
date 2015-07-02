@@ -15,7 +15,8 @@ NSString * const kGPUImageSaturationBlendVertexShaderString = SHADER_STRING
  uniform mat4 mvp;
  
  void main() {
-     gl_Position = mvp * position;
+     //gl_Position = mvp * position;
+     gl_Position = position;
      textureCoordinate = inputTextureCoordinate.xy;
  }
 );
@@ -27,7 +28,6 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
  
  uniform sampler2D inputImageTexture;
  uniform sampler2D inputImageTexture2;
- uniform sampler2D inputImageTexture3;
  
  uniform lowp float factor;
  
@@ -45,17 +45,11 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
  {
 
      highp vec4 cameraColor = texture2D(inputImageTexture, textureCoordinate);
-     highp vec4 squareColor = texture2D(inputImageTexture2, textureCoordinate);
-     highp vec4 holeColor = texture2D(inputImageTexture3, textureCoordinate);
-     
+     highp vec4 stencilColor = texture2D(inputImageTexture2, textureCoordinate);
      cameraColor = gray_filter(cameraColor);
-     cameraColor = bright_contrast_filter(cameraColor, factor, 1.0);
+     cameraColor = bright_contrast_filter(cameraColor, 0.5, 2.0);
      
-     highp vec4 c = cameraColor * (1.0 - holeColor.a) + squareColor * holeColor.a;
-     
-     //gl_FragColor = mix(cameraColor, stencilColor, stencilColor.a);
-     gl_FragColor = c;
-     //gl_FragColor = stencilColor;
+     gl_FragColor = mix(cameraColor, stencilColor, stencilColor.a);
  }
 );
 #else
@@ -225,6 +219,8 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
     temp1 = GLKMatrix4ScaleWithVector3(_mvp, scalexyz);
     temp2 = GLKMatrix4RotateWithVector3(temp1, radians, rotatexyz);
     temp3 = GLKMatrix4TranslateWithVector3(temp2, movexyz);
+    
+    
     
     GPUMatrix4x4 mvp_trans;//GPUImage风格
     //GPUMatrix4x4 * xx = malloc(sizeof(GPUMatrix4x4));

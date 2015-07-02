@@ -381,7 +381,7 @@
         
         glVertexAttribPointer(displayPositionAttribute, 2, GL_FLOAT, 0, 0, imageVertices);
         glVertexAttribPointer(displayTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, [GPUImageView textureCoordinatesForRotation:inputRotation]);
-        
+        //if([inputFramebufferForDisplay texture] == 6)
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         
         [self presentFramebuffer];
