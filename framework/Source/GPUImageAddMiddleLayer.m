@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Brad Larson. All rights reserved.
 //
 
+/*
+ this is a test;
+ */
+
 #import "GPUImageAddMiddleLayer.h"
 #import "GPUImage.h"
 
