@@ -8,6 +8,12 @@
     UISlider *filterSettingsSlider;
     UIButton *photoCaptureButton;
     
+    UISlider *picLeftRightMove;
+    UISlider *picUpDownMove;
+    UISlider *picScale;
+    UISlider *picRotate;
+    
+    
     GPUImagePicture *sourcePicture;
     GPUImagePicture * sourcePicture2;
     
@@ -16,5 +22,10 @@
 
 - (IBAction)updateSliderValue:(id)sender;
 - (IBAction)takePhoto:(id)sender;
+
+- (IBAction)lr:(id)sender;
+- (IBAction)ud:(id)sender;
+- (IBAction)s:(id)sender;
+- (IBAction)r:(id)sender;
 
 @end

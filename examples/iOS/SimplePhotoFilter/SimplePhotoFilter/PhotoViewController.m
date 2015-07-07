@@ -1,3 +1,4 @@
+#import <Foundation/Foundation.h>
 #import "PhotoViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
@@ -42,7 +43,41 @@
     
     [primaryView addSubview:photoCaptureButton];
     
+    ////////////////////////////////////////////
+    
+//    - (IBAction)updateSliderValue:(id)sender
+    CGRect rectlr = {25.0, mainScreenFrame.size.height - 100.0, mainScreenFrame.size.width - 50.0, 40.0};
+    UISlider * slr = [self addSlider:picLeftRightMove inPosition:&rectlr withmaxis:1.0f minis:-1.0f originis:0.0 useFuncClass:@selector(lr:)];
+    [primaryView addSubview:slr];
+    
+    CGRect rectud = {25.0, mainScreenFrame.size.height - 150.0, mainScreenFrame.size.width - 50.0, 40.0};
+    UISlider * sud = [self addSlider:picUpDownMove inPosition:&rectud withmaxis:1.0f minis:-1.0f originis:0.0 useFuncClass:@selector(ud:)];
+    [primaryView addSubview:sud];
+    
+    CGRect rects = {25.0, mainScreenFrame.size.height - 200.0, mainScreenFrame.size.width - 50.0, 40.0};
+    UISlider * ss = [self addSlider:picLeftRightMove inPosition:&rects withmaxis:1.0f minis:-1.0f originis:1.0 useFuncClass:@selector(s:)];
+    [primaryView addSubview:ss];
+    
+    CGRect rectr = {25.0, mainScreenFrame.size.height - 250.0, mainScreenFrame.size.width - 50.0, 40.0};
+    UISlider * sr = [self addSlider:picLeftRightMove inPosition:&rectr withmaxis:10.0f minis:-10.0f originis:0.0 useFuncClass:@selector(r:)];
+    [primaryView addSubview:sr];
+    
+    ////////////////////////////////////////////
+    
+    
 	self.view = primaryView;	
+}
+
+- (UISlider *)addSlider:(UISlider *)slider inPosition:(CGRect *)rect withmaxis:(float)max minis:(float)min originis:(float)origin useFuncClass:(SEL)ufc;
+{
+    /*add sliter to control photo*/
+    slider = [[UISlider alloc] initWithFrame:*rect];
+    [slider addTarget:self action:ufc forControlEvents:UIControlEventValueChanged];
+    slider.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    slider.minimumValue = min;
+    slider.maximumValue = max;
+    slider.value = origin;
+    return slider;
 }
 
 - (void)viewDidLoad
@@ -126,18 +161,62 @@
     GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
     [baozoubiaoqingfilter setFactor:[(UISlider *)sender value]];
     
-    /*
-     *下面的函数调用应当是通过两指触控调用的函数，暂且添加在此处。
-     */
-    //做平移变换，值为0.0时为平移0。
-    [baozoubiaoqingfilter translateX: 0.0 Y:0.0 Z:0.0];
-    //做缩放变换，值为1.0时，放大为原来的1.0倍。
-    [baozoubiaoqingfilter scaleX:1.0 Y:1.0 Z:1.0];
-    //
-    [baozoubiaoqingfilter rotateX:0.0 Y:0.0 Z:1.0 radians:3.14159/2.0];
+//    /*
+//     *下面的函数调用应当是通过两指触控调用的函数，暂且添加在此处。
+//     */
+//    //做平移变换，值为0.0时为平移0。
+//    [baozoubiaoqingfilter translateX: 0.0 Y:0.0 Z:0.0];
+//    //做缩放变换，值为1.0时，放大为原来的1.0倍。
+//    [baozoubiaoqingfilter scaleX:1.0 Y:1.0 Z:1.0];
+//    //
+//    [baozoubiaoqingfilter rotateX:0.0 Y:0.0 Z:1.0 radians:3.14159/2.0];
+//    
+//    [baozoubiaoqingfilter setMvp];
+    
+}
+
+- (IBAction)lr:(id)sender
+{
+    GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
+    
+    float xvalue = [(UISlider *)sender value];
+    [baozoubiaoqingfilter translateX:xvalue Y:0.0 Z:0.0];
     
     [baozoubiaoqingfilter setMvp];
+
+}
+
+- (IBAction)ud:(id)sender
+{
+    GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
+    float yvalue = [(UISlider *)sender value];
+    [baozoubiaoqingfilter translateX:0.0 Y:yvalue Z:0.0];
+
+    [baozoubiaoqingfilter setMvp];
+
+}
+
+- (IBAction)s:(id)sender{
     
+    GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
+    
+    float svalue = [(UISlider *)sender value];
+    [baozoubiaoqingfilter scaleX:svalue Y:svalue Z:1.0];
+
+    [baozoubiaoqingfilter setMvp];
+
+}
+
+-(IBAction)r:(id)sender{
+    
+    GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
+    //默认为沿着z轴做旋转
+    float rvalue = [(UISlider *)sender value];
+    
+    [baozoubiaoqingfilter rotateX:0.0 Y:0.0 Z:1.0 radians:rvalue];
+    
+    [baozoubiaoqingfilter setMvp];
+
 }
 
 

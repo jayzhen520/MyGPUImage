@@ -15,7 +15,11 @@ NSString * const kGPUImageSaturationBlendVertexShaderString = SHADER_STRING
  uniform mat4 mvp;
  
  void main() {
-     gl_Position = mvp * position;
+     highp vec4 pos = mvp * position;
+//     gl_Position = mvp * position;
+     pos.y *= 0.75;
+     gl_Position = pos;
+//     gl_Position = position;
      textureCoordinate = inputTextureCoordinate.xy;
  }
 );
