@@ -25,6 +25,6 @@
 
 - (void)scaleX:(float)sx Y:(float)sy Z:(float)sz;
 
-- (void)setMvp;
+- (void)updateMvp;
 
 @end

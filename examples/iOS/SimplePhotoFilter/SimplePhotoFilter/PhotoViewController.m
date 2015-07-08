@@ -55,11 +55,11 @@
     [primaryView addSubview:sud];
     
     CGRect rects = {25.0, mainScreenFrame.size.height - 200.0, mainScreenFrame.size.width - 50.0, 40.0};
-    UISlider * ss = [self addSlider:picLeftRightMove inPosition:&rects withmaxis:1.0f minis:-1.0f originis:1.0 useFuncClass:@selector(s:)];
+    UISlider * ss = [self addSlider:picScale inPosition:&rects withmaxis:1.0f minis:-1.0f originis:1.0 useFuncClass:@selector(s:)];
     [primaryView addSubview:ss];
     
     CGRect rectr = {25.0, mainScreenFrame.size.height - 250.0, mainScreenFrame.size.width - 50.0, 40.0};
-    UISlider * sr = [self addSlider:picLeftRightMove inPosition:&rectr withmaxis:10.0f minis:-10.0f originis:0.0 useFuncClass:@selector(r:)];
+    UISlider * sr = [self addSlider:picRotate inPosition:&rectr withmaxis:10.0f minis:-10.0f originis:1.0 useFuncClass:@selector(r:)];
     [primaryView addSubview:sr];
     
     ////////////////////////////////////////////
@@ -182,7 +182,7 @@
     float xvalue = [(UISlider *)sender value];
     [baozoubiaoqingfilter translateX:xvalue Y:0.0 Z:0.0];
     
-    [baozoubiaoqingfilter setMvp];
+    [baozoubiaoqingfilter updateMvp];
 
 }
 
@@ -192,7 +192,7 @@
     float yvalue = [(UISlider *)sender value];
     [baozoubiaoqingfilter translateX:0.0 Y:yvalue Z:0.0];
 
-    [baozoubiaoqingfilter setMvp];
+    [baozoubiaoqingfilter updateMvp];
 
 }
 
@@ -203,7 +203,7 @@
     float svalue = [(UISlider *)sender value];
     [baozoubiaoqingfilter scaleX:svalue Y:svalue Z:1.0];
 
-    [baozoubiaoqingfilter setMvp];
+    [baozoubiaoqingfilter updateMvp];
 
 }
 
@@ -215,7 +215,7 @@
     
     [baozoubiaoqingfilter rotateX:0.0 Y:0.0 Z:1.0 radians:rvalue];
     
-    [baozoubiaoqingfilter setMvp];
+    [baozoubiaoqingfilter updateMvp];
 
 }
 

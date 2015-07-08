@@ -180,8 +180,21 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
      * OpenGL Matrix
      */
 //    _mvp = GLKMatrix4Identity;
+    
+    scalexyz.x = 1.0;
+    scalexyz.y = 1.0;
+    scalexyz.z = 1.0;
+    
+    rotatexyz.z = 1.0;
+//    movexyz = {0.0, 0.0, 0.0};
+//    rotatexyz = {0.0, 0.0, 0.0};
+    
     mvpUniform = [filterProgram uniformIndex:@"mvp"];
+//    self.mvp = GLKMatrix4Identity;
+//    [self setMvp:GLKMatrix4Identity];
     self.mvp = GLKMatrix4Identity;
+    [self setMvp:GLKMatrix4Identity];
+    
     
     return self;
 }
@@ -222,7 +235,10 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
     scalexyz.z = sz;
 }
 
-- (void)setMvp{
+- (void)setMvp:(GLKMatrix4)newValue
+{
+    _mvp = newValue;
+    
     GLKMatrix4 temp1;
     GLKMatrix4 temp2;
     GLKMatrix4 temp3;
@@ -235,6 +251,23 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
     [GPUImageAddMiddleLayer MatrixTransFromGLKitMatrix4:temp3 ToGPUMatrix4x4:&mvp_trans];
     
     [self setMatrix4f:mvp_trans forUniform:mvpUniform program:filterProgram];
+}
+
+- (void)updateMvp;
+{
+    GLKMatrix4 temp1;
+    GLKMatrix4 temp2;
+    GLKMatrix4 temp3;
+    temp1 = GLKMatrix4ScaleWithVector3(_mvp, scalexyz);
+    temp2 = GLKMatrix4RotateWithVector3(temp1, radians, rotatexyz);
+    temp3 = GLKMatrix4TranslateWithVector3(temp2, movexyz);
+
+    GPUMatrix4x4 mvp_trans;//GPUImage风格
+    //GPUMatrix4x4 * xx = malloc(sizeof(GPUMatrix4x4));
+    [GPUImageAddMiddleLayer MatrixTransFromGLKitMatrix4:temp3 ToGPUMatrix4x4:&mvp_trans];
+
+    [self setMatrix4f:mvp_trans forUniform:mvpUniform program:filterProgram];
+
 }
 
 @end

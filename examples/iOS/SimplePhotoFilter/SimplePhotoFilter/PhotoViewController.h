@@ -13,11 +13,9 @@
     UISlider *picScale;
     UISlider *picRotate;
     
-    
+    //为渲染的两张图准备的，跟显示并无关系。
     GPUImagePicture *sourcePicture;
     GPUImagePicture * sourcePicture2;
-    
-    GPUImagePicture *memoryPressurePicture1, *memoryPressurePicture2;
 }
 
 - (IBAction)updateSliderValue:(id)sender;
