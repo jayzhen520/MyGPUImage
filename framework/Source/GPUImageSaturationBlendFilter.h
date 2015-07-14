@@ -5,6 +5,8 @@
 {
     GLint factorUniform;
     
+    GLint faceSourceSizeAspectUniform;
+    
     GLuint mvpUniform;
     
     GLKVector3 movexyz;
@@ -18,6 +20,7 @@
 
 @property(readwrite, nonatomic) CGFloat factor;
 @property(readwrite, nonatomic) GLKMatrix4 mvp;
+@property(readwrite, nonatomic) CGFloat faceSourceSizeAspect;
 
 - (void)translateX:(float) xt Y:(float) yt Z:(float)zt;
 - (void)translateX:(float) tx;
@@ -28,5 +31,7 @@
 - (void)scaleX:(float)sx Y:(float)sy Z:(float)sz;
 
 - (void)updateMvp;
+
+
 
 @end

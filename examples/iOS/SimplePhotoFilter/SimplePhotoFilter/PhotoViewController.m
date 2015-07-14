@@ -93,8 +93,6 @@
     [filter addTarget:filterView];
     
     
-    
-    
     UIImage * inputImage2;
     inputImage2 = [UIImage imageNamed:@"pic/pandas2/表情600.jpg"];
     sourcePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage2 smoothlyScaleOutput:YES];
@@ -139,6 +137,12 @@
     sourcePhotoPicture = [[GPUImagePicture alloc]initWithImage:photoImage smoothlyScaleOutput:YES];
     [sourcePhotoPicture processImage];
     [sourcePhotoPicture addTarget:filter];
+    
+    GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
+    CGSize pixelSizeOfImage = [sourcePhotoPicture outputImageSize];
+    /*这个值应当在加载图片时就进行设置，因为这里没有出发加载图片的动作，因此初始没有进行设置，刚进来时，图会以正方形显示，会出现图像的变形*/
+    float aspect = pixelSizeOfImage.width / (1.0 * pixelSizeOfImage.height);
+    [baozoubiaoqingfilter setFaceSourceSizeAspect:aspect];
 }
 
 - (void)viewDidUnload

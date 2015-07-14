@@ -14,6 +14,7 @@ NSString * const kGPUImageSaturationBlendVertexShaderString = SHADER_STRING
  varying vec2 textureCoordinate2;
  
  uniform mat4 mvp;
+ uniform lowp float faceSourceSizeAspect;
  
  void main() {
      /*highp vec4 pos = mvp * position;
@@ -27,7 +28,7 @@ NSString * const kGPUImageSaturationBlendVertexShaderString = SHADER_STRING
      highp vec4 texPos = mvp * position;
      
      textureCoordinate = inputTextureCoordinate.xy;
-     texPos.y *= 1920.0 / 1200.0;
+     texPos.y *= faceSourceSizeAspect;
      textureCoordinate2 = (texPos.xy + 1.0) / 2.0;
      
  }
@@ -42,7 +43,9 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
  uniform sampler2D inputImageTexture2;
  uniform sampler2D inputImageTexture3;
  
+ 
  uniform lowp float factor;
+ 
  
  highp vec4 gray_filter(lowp vec4 inputColor){
      highp float gray = 0.299 * inputColor.r + 0.587 * inputColor.g + 0.114 * inputColor.b;
@@ -192,6 +195,9 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
     factorUniform = [filterProgram uniformIndex:@"factor"];
     self.factor = 0.5;
     
+    faceSourceSizeAspectUniform = [filterProgram uniformIndex:@"faceSourceSizeAspect"];
+    self.faceSourceSizeAspect = 1.0;
+    
     /*
      * OpenGL Matrix
      */
@@ -223,6 +229,12 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
     _factor = newValue;
     
     [self setFloat:_factor forUniform:factorUniform program:filterProgram];
+}
+
+- (void)setFaceSourceSizeAspect:(CGFloat)newValue
+{
+    _faceSourceSizeAspect = newValue;
+    [self setFloat:_faceSourceSizeAspect forUniform:faceSourceSizeAspectUniform program:filterProgram];
 }
 
 - (void)translateX:(float) tx Y:(float) ty Z:(float) tz
