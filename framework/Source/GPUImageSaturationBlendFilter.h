@@ -20,6 +20,8 @@
 @property(readwrite, nonatomic) GLKMatrix4 mvp;
 
 - (void)translateX:(float) xt Y:(float) yt Z:(float)zt;
+- (void)translateX:(float) tx;
+- (void)translateY:(float) ty;
 
 - (void)rotateX:(float)xr Y:(float)yr Z:(float)zr radians:(float)ra;
 

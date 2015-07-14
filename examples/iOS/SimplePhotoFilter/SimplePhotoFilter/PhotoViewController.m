@@ -14,6 +14,9 @@
     if (self) {
         // Custom initialization
     }
+    
+    mode = BAOZOUFACE_USE_PHOTO;
+    
     return self;
 }
 
@@ -25,7 +28,7 @@
 	GPUImageView *primaryView = [[GPUImageView alloc] initWithFrame:mainScreenFrame];
 	primaryView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    filterSettingsSlider = [[UISlider alloc] initWithFrame:CGRectMake(25.0, mainScreenFrame.size.height - 50.0, mainScreenFrame.size.width - 50.0, 40.0)];
+    filterSettingsSlider = [[UISlider alloc] initWithFrame:CGRectMake(25.0, mainScreenFrame.size.height - 30.0, mainScreenFrame.size.width - 50.0, 40.0)];
     [filterSettingsSlider addTarget:self action:@selector(updateSliderValue:) forControlEvents:UIControlEventValueChanged];
 	filterSettingsSlider.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     filterSettingsSlider.minimumValue = 0.0;
@@ -46,19 +49,19 @@
     ////////////////////////////////////////////
     
 //    - (IBAction)updateSliderValue:(id)sender
-    CGRect rectlr = {25.0, mainScreenFrame.size.height - 100.0, mainScreenFrame.size.width - 50.0, 40.0};
+    CGRect rectlr = {25.0, mainScreenFrame.size.height - 150.0, mainScreenFrame.size.width - 50.0, 40.0};
     UISlider * slr = [self addSlider:picLeftRightMove inPosition:&rectlr withmaxis:1.0f minis:-1.0f originis:0.0 useFuncClass:@selector(lr:)];
     [primaryView addSubview:slr];
     
-    CGRect rectud = {25.0, mainScreenFrame.size.height - 150.0, mainScreenFrame.size.width - 50.0, 40.0};
+    CGRect rectud = {25.0, mainScreenFrame.size.height - 120.0, mainScreenFrame.size.width - 50.0, 40.0};
     UISlider * sud = [self addSlider:picUpDownMove inPosition:&rectud withmaxis:1.0f minis:-1.0f originis:0.0 useFuncClass:@selector(ud:)];
     [primaryView addSubview:sud];
     
-    CGRect rects = {25.0, mainScreenFrame.size.height - 200.0, mainScreenFrame.size.width - 50.0, 40.0};
-    UISlider * ss = [self addSlider:picScale inPosition:&rects withmaxis:1.0f minis:-1.0f originis:1.0 useFuncClass:@selector(s:)];
+    CGRect rects = {25.0, mainScreenFrame.size.height - 90.0, mainScreenFrame.size.width - 50.0, 40.0};
+    UISlider * ss = [self addSlider:picScale inPosition:&rects withmaxis:1.0f minis:-1.0f originis:4.0 useFuncClass:@selector(s:)];
     [primaryView addSubview:ss];
     
-    CGRect rectr = {25.0, mainScreenFrame.size.height - 250.0, mainScreenFrame.size.width - 50.0, 40.0};
+    CGRect rectr = {25.0, mainScreenFrame.size.height - 60.0, mainScreenFrame.size.width - 50.0, 40.0};
     UISlider * sr = [self addSlider:picRotate inPosition:&rectr withmaxis:10.0f minis:-10.0f originis:1.0 useFuncClass:@selector(r:)];
     [primaryView addSubview:sr];
     
@@ -83,43 +86,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     
-    stillCamera = [[GPUImageStillCamera alloc] init];
-//    stillCamera = [[GPUImageStillCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
-    stillCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
-//    filter = [[GPUImageGammaFilter alloc] init];
     filter = [[GPUImageSaturationBlendFilter alloc] init];
-//    filter = [[GPUImageUnsharpMaskFilter alloc] init];
-//    [(GPUImageSketchFilter *)filter setTexelHeight:(1.0 / 1024.0)];
-//    [(GPUImageSketchFilter *)filter setTexelWidth:(1.0 / 768.0)];
-//    filter = [[GPUImageSmoothToonFilter alloc] init];
-//    filter = [[GPUImageSepiaFilter alloc] init];
-//    filter = [[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(0.5, 0.5, 0.5, 0.5)];
-//    secondFilter = [[GPUImageSepiaFilter alloc] init];
-//    terminalFilter = [[GPUImageSepiaFilter alloc] init];
-//    [filter addTarget:secondFilter];
-//    [secondFilter addTarget:terminalFilter];
-    
-//	[filter prepareForImageCapture];
-//	[terminalFilter prepareForImageCapture];
-    
-    [stillCamera addTarget:filter];
-    
     GPUImageView *filterView = (GPUImageView *)self.view;
-    //    [filter addTarget:filterView];
     [filter addTarget:filterView];
-    //    [terminalFilter addTarget:filterView];
     
-    //    [stillCamera.inputCamera lockForConfiguration:nil];
-    //    [stillCamera.inputCamera setFlashMode:AVCaptureFlashModeOn];
-    //    [stillCamera.inputCamera unlockForConfiguration];
     
-    [stillCamera startCameraCapture];
     
-    //UIImage *inputImage = [UIImage imageNamed:@"panda_4_3_king_hole.png"];
-    //memoryPressurePicture1 = [[GPUImagePicture alloc] initWithImage:inputImage];
-    //
-    //memoryPressurePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage];
     
     UIImage * inputImage2;
     inputImage2 = [UIImage imageNamed:@"pic/pandas2/表情600.jpg"];
@@ -136,10 +110,35 @@
     [sourcePicture processImage];
     [sourcePicture addTarget:filter];
     
+    switch (mode) {
+        case BAOZOUFACE_USE_CAMERA:
+            [self useCamera];
+            break;
+        case BAOZOUFACE_USE_PHOTO:
+            [self usePhoto];
+            break;
+        default:
+            break;
+    }
     
+}
+
+- (void)useCamera{
+    stillCamera = [[GPUImageStillCamera alloc] init];
+
+    stillCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
     
+    [stillCamera addTarget:filter];
     
-    
+    [stillCamera startCameraCapture];
+}
+
+- (void)usePhoto{
+    UIImage * photoImage;
+    photoImage = [UIImage imageNamed:@"pic/fbb.jpg"];
+    sourcePhotoPicture = [[GPUImagePicture alloc]initWithImage:photoImage smoothlyScaleOutput:YES];
+    [sourcePhotoPicture processImage];
+    [sourcePhotoPicture addTarget:filter];
 }
 
 - (void)viewDidUnload
@@ -160,7 +159,7 @@
     
     GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
     [baozoubiaoqingfilter setFactor:[(UISlider *)sender value]];
-    
+    [baozoubiaoqingfilter newFrameReady];
 //    /*
 //     *下面的函数调用应当是通过两指触控调用的函数，暂且添加在此处。
 //     */
@@ -180,20 +179,24 @@
     GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
     
     float xvalue = [(UISlider *)sender value];
-    [baozoubiaoqingfilter translateX:xvalue Y:0.0 Z:0.0];
+    [baozoubiaoqingfilter translateX:xvalue];
     
     [baozoubiaoqingfilter updateMvp];
+    
+    [baozoubiaoqingfilter newFrameReady];
 
+//    [baozoubiaoqingfilter informTargetsAboutNewFrameAtTime:time];
 }
 
 - (IBAction)ud:(id)sender
 {
     GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
     float yvalue = [(UISlider *)sender value];
-    [baozoubiaoqingfilter translateX:0.0 Y:yvalue Z:0.0];
+    [baozoubiaoqingfilter translateY:yvalue];
 
     [baozoubiaoqingfilter updateMvp];
 
+    [baozoubiaoqingfilter newFrameReady];
 }
 
 - (IBAction)s:(id)sender{
@@ -204,6 +207,8 @@
     [baozoubiaoqingfilter scaleX:svalue Y:svalue Z:1.0];
 
     [baozoubiaoqingfilter updateMvp];
+    
+    [baozoubiaoqingfilter newFrameReady];
 
 }
 
@@ -217,6 +222,7 @@
     
     [baozoubiaoqingfilter updateMvp];
 
+    [baozoubiaoqingfilter newFrameReady];
 }
 
 

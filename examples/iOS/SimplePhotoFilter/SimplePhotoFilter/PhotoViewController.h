@@ -1,6 +1,16 @@
 #import <UIKit/UIKit.h>
 #import "GPUImage.h"
 
+//typedef NS_ENUM(NSInteger, FaceConstructMode){
+//    FACESTENCIL,
+//    PHOTO_PLUS_STENCIL,
+//};
+
+typedef enum:NSUInteger{
+    BAOZOUFACE_USE_CAMERA,
+    BAOZOUFACE_USE_PHOTO
+} bzFaceMode;
+
 @interface PhotoViewController : UIViewController
 {
     GPUImageStillCamera *stillCamera;
@@ -13,9 +23,12 @@
     UISlider *picScale;
     UISlider *picRotate;
     
+    bzFaceMode mode;
+    
     //为渲染的两张图准备的，跟显示并无关系。
     GPUImagePicture *sourcePicture;
     GPUImagePicture * sourcePicture2;
+    GPUImagePicture * sourcePhotoPicture;
 }
 
 - (IBAction)updateSliderValue:(id)sender;

@@ -11,16 +11,25 @@ NSString * const kGPUImageSaturationBlendVertexShaderString = SHADER_STRING
  attribute vec4 position;
  attribute vec4 inputTextureCoordinate;
  varying vec2 textureCoordinate;
+ varying vec2 textureCoordinate2;
  
  uniform mat4 mvp;
  
  void main() {
-     highp vec4 pos = mvp * position;
+     /*highp vec4 pos = mvp * position;
 //     gl_Position = mvp * position;
-     pos.y *= 0.75;
+//     pos.y *= 3.0;
      gl_Position = pos;
 //     gl_Position = position;
+     textureCoordinate = inputTextureCoordinate.xy;*/
+     
+     gl_Position = position;
+     highp vec4 texPos = mvp * position;
+     
      textureCoordinate = inputTextureCoordinate.xy;
+     texPos.y *= 1920.0 / 1200.0;
+     textureCoordinate2 = (texPos.xy + 1.0) / 2.0;
+     
  }
 );
 
@@ -48,9 +57,16 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
  void main()
  {
 
-     highp vec4 cameraColor = texture2D(inputImageTexture, textureCoordinate);
-     highp vec4 squareColor = texture2D(inputImageTexture2, textureCoordinate);
-     highp vec4 holeColor = texture2D(inputImageTexture3, textureCoordinate);
+     highp vec4 cameraColor;
+     if(textureCoordinate2.x > 1.0 || textureCoordinate2.y > 1.0 || textureCoordinate2.x < 0.0 || textureCoordinate2.y < 0.0){
+         cameraColor = vec4(0.0, 0.0, 0.0, 1.0);
+     }else{
+         cameraColor = texture2D(inputImageTexture3, textureCoordinate2);
+     }
+     
+     
+     highp vec4 squareColor = texture2D(inputImageTexture, textureCoordinate);
+     highp vec4 holeColor = texture2D(inputImageTexture2, textureCoordinate);
      
      cameraColor = gray_filter(cameraColor);
      cameraColor = bright_contrast_filter(cameraColor, factor, 1.0);
@@ -215,6 +231,18 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
     movexyz.x = tx;
     movexyz.y = ty;
     movexyz.z = tz;
+}
+
+- (void)translateX:(float) tx
+{
+    //GLKMatrix4Translate(mvp, tx, ty, tz);
+    movexyz.x = tx;
+}
+
+- (void)translateY:(float) ty
+{
+    //GLKMatrix4Translate(mvp, tx, ty, tz);
+    movexyz.y = ty;
 }
 
 - (void)rotateX:(float)rx Y:(float)ry Z:(float)rz radians:(float)ra
