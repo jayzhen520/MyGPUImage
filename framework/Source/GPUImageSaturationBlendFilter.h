@@ -10,6 +10,13 @@
     
     GLuint mvpUniform;
     
+    float last_tx;
+    float last_ty;
+    
+    float last_s;
+    
+    float last_r;
+    
 //    GLKVector3 movexyz;
 //    GLKVector3 rotatexyz;
 //    float radians;

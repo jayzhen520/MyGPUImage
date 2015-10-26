@@ -222,6 +222,13 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 //    [self setMvp:GLKMatrix4Identity];
     self.mvp = GLKMatrix4Identity;
     
+    last_tx = 0.0f;
+    last_ty = 0.0f;
+    last_r = 0.0f;
+    last_s = 0.0f;
+    
+    
+    
     [self mvpUpdate];
     
     return self;
@@ -252,7 +259,10 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 - (void)translateX:(float) tx Y:(float) ty
 {
     //z周上在图片处理上平移没有意义，因此设为0.0
-    _mvp = GLKMatrix4Translate(_mvp, -tx, -ty, 0.0);
+//    _mvp = GLKMatrix4Translate(_mvp, -tx, -ty, 0.0);
+    _mvp = GLKMatrix4Translate(_mvp, -(tx - last_tx), ty - last_ty, 0.0);
+    last_tx = tx;
+    last_ty = ty;
     [self mvpUpdate];
 }
 
@@ -260,14 +270,18 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 {
     //GLKMatrix4Translate(mvp, rx, ry, rz);
     //对rx,ry,rz进行判断，如果rx,ry,rz都为0，系统函数在进行Normalize时会出现错误。
-    _mvp = GLKMatrix4Rotate(_mvp, -ra, 0.0, 0.0, 1.0);
+//    _mvp = GLKMatrix4Rotate(_mvp, -ra, 0.0, 0.0, 1.0);
+    _mvp = GLKMatrix4Rotate(_mvp, -(ra - last_r), 0.0, 0.0, 1.0);
+    last_r = ra;
     [self mvpUpdate];
 }
 
 - (void)scaleX:(float)sx Y:(float)sy
 {
     //z轴上在图片处理上缩放没有意义，因此设为1.0
-    _mvp = GLKMatrix4Scale(_mvp, -sx, -sy, 1.0);
+//    _mvp = GLKMatrix4Scale(_mvp, -sx, -sy, 1.0);
+    _mvp = GLKMatrix4Scale(_mvp, -(sx - last_s) + 1.0, -(sy - last_s) + 1.0, 1.0);
+    last_s = sx;
     [self mvpUpdate];
 }
 

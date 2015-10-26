@@ -221,7 +221,7 @@
 				ORGANIZATIONNAME = "Cell Phone";
 				TargetAttributes = {
 					BCC1E69B1523E3620006EFA5 = {
-						DevelopmentTeam = GD2NSEEHN2;
+						DevelopmentTeam = 6MFSKD77RL;
 					};
 				};
 			};
@@ -329,6 +329,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -365,6 +366,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -393,6 +395,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SimplePhotoFilter/SimplePhotoFilter-Prefix.pch";
 				INFOPLIST_FILE = "SimplePhotoFilter/SimplePhotoFilter-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xxxxx.xxxx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -408,6 +411,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SimplePhotoFilter/SimplePhotoFilter-Prefix.pch";
 				INFOPLIST_FILE = "SimplePhotoFilter/SimplePhotoFilter-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xxxxx.xxxx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
