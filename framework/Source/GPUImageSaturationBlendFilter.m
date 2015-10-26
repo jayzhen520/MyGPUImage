@@ -41,10 +41,9 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
  
  uniform sampler2D inputImageTexture;
  uniform sampler2D inputImageTexture2;
- uniform sampler2D inputImageTexture3;
  
- 
- uniform lowp float factor;
+ uniform highp float picAspect;
+ uniform highp float fbrightness;
  
  
  highp vec4 gray_filter(lowp vec4 inputColor){
@@ -59,26 +58,30 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
  
  void main()
  {
-
-     highp vec4 cameraColor;
-     if(textureCoordinate2.x > 1.0 || textureCoordinate2.y > 1.0 || textureCoordinate2.x < 0.0 || textureCoordinate2.y < 0.0){
-         cameraColor = vec4(0.0, 0.0, 0.0, 1.0);
-     }else{
-         cameraColor = texture2D(inputImageTexture3, textureCoordinate2);
-     }
+     highp vec2 tex1 = textureCoordinate;
      
+     highp vec2 tex2 = textureCoordinate2;
      
-     highp vec4 squareColor = texture2D(inputImageTexture, textureCoordinate);
-     highp vec4 holeColor = texture2D(inputImageTexture2, textureCoordinate);
+     tex2 -= 0.5;
+     tex2 = vec2(tex2.x, tex2.y / picAspect);
+     tex2 += 0.5;
+     
+     highp vec4 stencilColor = texture2D(inputImageTexture, tex1);
+     highp vec4 cameraColor = texture2D(inputImageTexture2, tex2);
      
      cameraColor = gray_filter(cameraColor);
-     cameraColor = bright_contrast_filter(cameraColor, factor, 1.0);
      
-     highp vec4 c = cameraColor * (1.0 - holeColor.a) + squareColor * holeColor.a;
+     cameraColor = bright_contrast_filter(cameraColor, fbrightness, 2.0);
      
-     //gl_FragColor = mix(cameraColor, stencilColor, stencilColor.a);
-     gl_FragColor = c;
-     //gl_FragColor = stencilColor;
+     
+     highp float alpha = stencilColor.a;
+     if(stencilColor.a > 0.0)
+         stencilColor = vec4(stencilColor.rgb / stencilColor.a, 1.0);
+     else
+         stencilColor = vec4(stencilColor.rgb, 1.0);
+     
+     
+     gl_FragColor = mix(cameraColor, stencilColor, alpha);
  }
 );
 #else
@@ -192,8 +195,11 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 		return nil;
     }
     
-    factorUniform = [filterProgram uniformIndex:@"factor"];
-    self.factor = 0.5;
+    picAspectUniform = [filterProgram uniformIndex:@"picAspect"];
+    self.picAspect = 1.0;
+    
+    fbrightnessUniform = [filterProgram uniformIndex:@"fbrightness"];
+    self.fbrightness = 0.5;
     
     faceSourceSizeAspectUniform = [filterProgram uniformIndex:@"faceSourceSizeAspect"];
     self.faceSourceSizeAspect = 1.0;
@@ -203,11 +209,11 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
      */
 //    _mvp = GLKMatrix4Identity;
     
-    scalexyz.x = 1.0;
-    scalexyz.y = 1.0;
-    scalexyz.z = 1.0;
-    
-    rotatexyz.z = 1.0;
+//    scalexyz.x = 1.0;
+//    scalexyz.y = 1.0;
+//    scalexyz.z = 1.0;
+//    
+//    rotatexyz.z = 1.0;
 //    movexyz = {0.0, 0.0, 0.0};
 //    rotatexyz = {0.0, 0.0, 0.0};
     
@@ -215,8 +221,8 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 //    self.mvp = GLKMatrix4Identity;
 //    [self setMvp:GLKMatrix4Identity];
     self.mvp = GLKMatrix4Identity;
-    [self setMvp:GLKMatrix4Identity];
     
+    [self mvpUpdate];
     
     return self;
 }
@@ -224,11 +230,17 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
 #pragma mark -
 #pragma mark Accessors
 
-- (void)setFactor:(CGFloat)newValue
+- (void)setPicAspect:(CGFloat)newValue
 {
-    _factor = newValue;
+    _picAspect = newValue;
     
-    [self setFloat:_factor forUniform:factorUniform program:filterProgram];
+    [self setFloat:_picAspect forUniform:picAspectUniform program:filterProgram];
+}
+
+- (void)setFbrightness:(CGFloat)fbrightness
+{
+    _fbrightness = fbrightness;
+    [self setFloat:_fbrightness forUniform:fbrightnessUniform program:filterProgram];
 }
 
 - (void)setFaceSourceSizeAspect:(CGFloat)newValue
@@ -237,77 +249,59 @@ NSString *const kGPUImageSaturationBlendFragmentShaderString = SHADER_STRING
     [self setFloat:_faceSourceSizeAspect forUniform:faceSourceSizeAspectUniform program:filterProgram];
 }
 
-- (void)translateX:(float) tx Y:(float) ty Z:(float) tz
+- (void)translateX:(float) tx Y:(float) ty
 {
-    //GLKMatrix4Translate(mvp, tx, ty, tz);
-    movexyz.x = tx;
-    movexyz.y = ty;
-    movexyz.z = tz;
+    //z周上在图片处理上平移没有意义，因此设为0.0
+    _mvp = GLKMatrix4Translate(_mvp, -tx, -ty, 0.0);
+    [self mvpUpdate];
 }
 
-- (void)translateX:(float) tx
-{
-    //GLKMatrix4Translate(mvp, tx, ty, tz);
-    movexyz.x = tx;
-}
-
-- (void)translateY:(float) ty
-{
-    //GLKMatrix4Translate(mvp, tx, ty, tz);
-    movexyz.y = ty;
-}
-
-- (void)rotateX:(float)rx Y:(float)ry Z:(float)rz radians:(float)ra
+- (void)rotate:(float)ra
 {
     //GLKMatrix4Translate(mvp, rx, ry, rz);
     //对rx,ry,rz进行判断，如果rx,ry,rz都为0，系统函数在进行Normalize时会出现错误。
-    rotatexyz.x = rx;
-    rotatexyz.y = ry;
-    rotatexyz.z = rz;
-    
-    radians = ra;
+    _mvp = GLKMatrix4Rotate(_mvp, -ra, 0.0, 0.0, 1.0);
+    [self mvpUpdate];
 }
 
-- (void)scaleX:(float)sx Y:(float)sy Z:(float)sz
+- (void)scaleX:(float)sx Y:(float)sy
 {
-    scalexyz.x = sx;
-    scalexyz.y = sy;
-    scalexyz.z = sz;
+    //z轴上在图片处理上缩放没有意义，因此设为1.0
+    _mvp = GLKMatrix4Scale(_mvp, -sx, -sy, 1.0);
+    [self mvpUpdate];
 }
 
-- (void)setMvp:(GLKMatrix4)newValue
+- (void)mvpUpdate;
 {
-    _mvp = newValue;
-    
-    GLKMatrix4 temp1;
-    GLKMatrix4 temp2;
-    GLKMatrix4 temp3;
-    temp1 = GLKMatrix4ScaleWithVector3(_mvp, scalexyz);
-    temp2 = GLKMatrix4RotateWithVector3(temp1, radians, rotatexyz);
-    temp3 = GLKMatrix4TranslateWithVector3(temp2, movexyz);
-    
-    GPUMatrix4x4 mvp_trans;//GPUImage风格
-    //GPUMatrix4x4 * xx = malloc(sizeof(GPUMatrix4x4));
-    [GPUImageAddMiddleLayer MatrixTransFromGLKitMatrix4:temp3 ToGPUMatrix4x4:&mvp_trans];
-    
+    GPUMatrix4x4 mvp_trans;
+    [GPUImageAddMiddleLayer MatrixTransFromGLKitMatrix4:_mvp ToGPUMatrix4x4:&mvp_trans];
     [self setMatrix4f:mvp_trans forUniform:mvpUniform program:filterProgram];
 }
 
-- (void)updateMvp;
+/*
+ *此函数只在用户对图片（而非相机）处理时使用。
+ */
+- (void)newFrameReady;
 {
-    GLKMatrix4 temp1;
-    GLKMatrix4 temp2;
-    GLKMatrix4 temp3;
-    temp1 = GLKMatrix4ScaleWithVector3(_mvp, scalexyz);
-    temp2 = GLKMatrix4RotateWithVector3(temp1, radians, rotatexyz);
-    temp3 = GLKMatrix4TranslateWithVector3(temp2, movexyz);
-
-    GPUMatrix4x4 mvp_trans;//GPUImage风格
-    //GPUMatrix4x4 * xx = malloc(sizeof(GPUMatrix4x4));
-    [GPUImageAddMiddleLayer MatrixTransFromGLKitMatrix4:temp3 ToGPUMatrix4x4:&mvp_trans];
-
-    [self setMatrix4f:mvp_trans forUniform:mvpUniform program:filterProgram];
-
+    
+    //    if (hasReceivedFirstFrame && hasReceivedSecondFrame && hasReceivedThirdFrame)
+    //    {
+    static const GLfloat imageVertices[] = {
+        -1.0f, -1.0f,
+        1.0f, -1.0f,
+        -1.0f,  1.0f,
+        1.0f,  1.0f,
+    };
+    
+    [self renderToTextureWithVertices:imageVertices textureCoordinates:[[self class] textureCoordinatesForRotation:inputRotation]];
+    
+    CMTime time;
+    
+    [self informTargetsAboutNewFrameAtTime:time];
+    
+    //    }
 }
+
+
 
 @end

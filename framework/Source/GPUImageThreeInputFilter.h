@@ -18,6 +18,4 @@ extern NSString *const kGPUImageThreeInputTextureVertexShaderString;
 
 - (void)disableThirdFrameCheck;
 
-- (void)newFrameReady;
-
 @end

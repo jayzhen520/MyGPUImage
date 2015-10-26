@@ -58,7 +58,7 @@
     [primaryView addSubview:sud];
     
     CGRect rects = {25.0, mainScreenFrame.size.height - 90.0, mainScreenFrame.size.width - 50.0, 40.0};
-    UISlider * ss = [self addSlider:picScale inPosition:&rects withmaxis:1.0f minis:-1.0f originis:4.0 useFuncClass:@selector(s:)];
+    UISlider * ss = [self addSlider:picScale inPosition:&rects withmaxis:4.0f minis:0.2f originis:1.0 useFuncClass:@selector(s:)];
     [primaryView addSubview:ss];
     
     CGRect rectr = {25.0, mainScreenFrame.size.height - 60.0, mainScreenFrame.size.width - 50.0, 40.0};
@@ -91,15 +91,6 @@
     filter = [[GPUImageSaturationBlendFilter alloc] init];
     GPUImageView *filterView = (GPUImageView *)self.view;
     [filter addTarget:filterView];
-    
-    
-    UIImage * inputImage2;
-    inputImage2 = [UIImage imageNamed:@"pic/pandas2/表情600.jpg"];
-    sourcePicture2 = [[GPUImagePicture alloc] initWithImage:inputImage2 smoothlyScaleOutput:YES];
-    [sourcePicture2 processImage];
-    [sourcePicture2 addTarget:filter];
-    
-    
     
     UIImage *inputImage;
     inputImage = [UIImage imageNamed:@"pic/pandas/表情600_hole.png"];
@@ -143,6 +134,7 @@
     /*这个值应当在加载图片时就进行设置，因为这里没有出发加载图片的动作，因此初始没有进行设置，刚进来时，图会以正方形显示，会出现图像的变形*/
     float aspect = pixelSizeOfImage.width / (1.0 * pixelSizeOfImage.height);
     [baozoubiaoqingfilter setFaceSourceSizeAspect:aspect];
+    [baozoubiaoqingfilter newFrameReady];
 }
 
 - (void)viewDidUnload
@@ -162,19 +154,8 @@
 //    [(GPUImageGammaFilter *)filter setGamma:[(UISlider *)sender value]];
     
     GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
-    [baozoubiaoqingfilter setFactor:[(UISlider *)sender value]];
+    [baozoubiaoqingfilter setFbrightness:[(UISlider *)sender value]];
     [baozoubiaoqingfilter newFrameReady];
-//    /*
-//     *下面的函数调用应当是通过两指触控调用的函数，暂且添加在此处。
-//     */
-//    //做平移变换，值为0.0时为平移0。
-//    [baozoubiaoqingfilter translateX: 0.0 Y:0.0 Z:0.0];
-//    //做缩放变换，值为1.0时，放大为原来的1.0倍。
-//    [baozoubiaoqingfilter scaleX:1.0 Y:1.0 Z:1.0];
-//    //
-//    [baozoubiaoqingfilter rotateX:0.0 Y:0.0 Z:1.0 radians:3.14159/2.0];
-//    
-//    [baozoubiaoqingfilter setMvp];
     
 }
 
@@ -183,9 +164,7 @@
     GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
     
     float xvalue = [(UISlider *)sender value];
-    [baozoubiaoqingfilter translateX:xvalue];
-    
-    [baozoubiaoqingfilter updateMvp];
+    [baozoubiaoqingfilter translateX:xvalue Y:0.0];
     
     [baozoubiaoqingfilter newFrameReady];
 
@@ -196,9 +175,7 @@
 {
     GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
     float yvalue = [(UISlider *)sender value];
-    [baozoubiaoqingfilter translateY:yvalue];
-
-    [baozoubiaoqingfilter updateMvp];
+    [baozoubiaoqingfilter translateX:0.0 Y:yvalue];
 
     [baozoubiaoqingfilter newFrameReady];
 }
@@ -208,9 +185,7 @@
     GPUImageSaturationBlendFilter * baozoubiaoqingfilter = (GPUImageSaturationBlendFilter *)filter;
     
     float svalue = [(UISlider *)sender value];
-    [baozoubiaoqingfilter scaleX:svalue Y:svalue Z:1.0];
-
-    [baozoubiaoqingfilter updateMvp];
+    [baozoubiaoqingfilter scaleX:svalue Y:svalue];
     
     [baozoubiaoqingfilter newFrameReady];
 
@@ -222,9 +197,7 @@
     //默认为沿着z轴做旋转
     float rvalue = [(UISlider *)sender value];
     
-    [baozoubiaoqingfilter rotateX:0.0 Y:0.0 Z:1.0 radians:rvalue];
-    
-    [baozoubiaoqingfilter updateMvp];
+    [baozoubiaoqingfilter rotate:rvalue];
 
     [baozoubiaoqingfilter newFrameReady];
 }

@@ -327,29 +327,7 @@ NSString *const kGPUImageThreeInputTextureVertexShaderString = SHADER_STRING
     }
 }
 
-/*
- *此函数只在用户对图片（而非相机）处理时使用。
- */
-- (void)newFrameReady;
-{
 
-//    if (hasReceivedFirstFrame && hasReceivedSecondFrame && hasReceivedThirdFrame)
-//    {
-        static const GLfloat imageVertices[] = {
-            -1.0f, -1.0f,
-            1.0f, -1.0f,
-            -1.0f,  1.0f,
-            1.0f,  1.0f,
-        };
-        
-        [self renderToTextureWithVertices:imageVertices textureCoordinates:[[self class] textureCoordinatesForRotation:inputRotation]];
-        
-        CMTime time;
-        
-        [self informTargetsAboutNewFrameAtTime:time];
-        
-//    }
-}
 
 
 @end
